@@ -19,6 +19,7 @@ const run = async () => {
     try {
         const categorieCollection = client.db('jobPilot').collection('categories');
         const jobsCollection = client.db('jobPilot').collection('jobListings');
+        const usersCollection = client.db('jobPilot').collection('users');
 
         app.get('/categories', async (req, res) => {
             const categories = await categorieCollection.find({}).toArray();
@@ -36,6 +37,19 @@ const run = async () => {
             const jobs = await jobsCollection.find(query).toArray();
             
             res.send(jobs);
+        })
+
+        app.put('/users', async (req, res) => {
+            const email = req.query.email;
+            const user = req.body;
+            const filter = { email: email }
+            const options = { upsert: true }
+            const updateDoc = {
+                $set: user
+            }
+
+            const result = await usersCollection.updateOne(filter, updateDoc, options)
+            res.send(result);
         })
     }
     finally {
