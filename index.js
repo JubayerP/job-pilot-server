@@ -73,6 +73,18 @@ const run = async () => {
             const user = await usersCollection.findOne({email: email})
             res.send(user);
         })
+
+        app.put('/user', async (req, res) => {
+            const email = req.query.email;
+            const user = req.body;
+            const filter = { email: email };
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: user
+            }
+            const updatedUser = await usersCollection.updateOne(filter, updateDoc, options);
+            res.send(updatedUser)
+        })
     }
     finally {
 
