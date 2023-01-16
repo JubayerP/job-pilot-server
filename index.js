@@ -51,6 +51,28 @@ const run = async () => {
             const result = await usersCollection.updateOne(filter, updateDoc, options)
             res.send(result);
         })
+
+        app.get('/users/employer', async (req, res) => {
+            const query = { email: req.query.email }
+            const user = await usersCollection.findOne(query);
+
+            if (user?.type === 'employer') {
+                res.send({isEmployer: user?.type === 'employer'})
+            }
+        })
+        app.get('/users/jobseeker', async (req, res) => {
+            const query = { email: req.query.email }
+            const user = await usersCollection.findOne(query);
+
+            if (user?.type === 'job seeker') {
+                res.send({isJobSeeker: user?.type === 'job seeker'})
+            }
+        })
+        app.get('/user/:email', async (req, res) => {
+            const email = req.params.email;
+            const user = await usersCollection.findOne({email: email})
+            res.send(user);
+        })
     }
     finally {
 
