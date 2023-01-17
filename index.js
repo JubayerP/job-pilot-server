@@ -39,6 +39,12 @@ const run = async () => {
             res.send(jobs);
         })
 
+        app.post('/joblistings', async (req, res) => {
+            const jobData = req.body;
+            const result = await jobsCollection.insertOne(jobData);
+            res.send(result);
+        })
+
         app.put('/users', async (req, res) => {
             const email = req.query.email;
             const user = req.body;
